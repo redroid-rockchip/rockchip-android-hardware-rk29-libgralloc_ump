@@ -110,7 +110,7 @@ uint64_t gralloc_select_format(int req_format, int usage, int buffer_size)
 	(void) usage;
 	(void) buffer_size;
 
-    if(req_format == HAL_PIXEL_FORMAT_YCrCb_NV12_10 && (usage & ARM_P010))
+    if(req_format == HAL_PIXEL_FORMAT_YCrCb_NV12_10 && USAGE_CONTAIN_VALUE(GRALLOC_USAGE_TO_USE_ARM_P010,GRALLOC_USAGE_ROT_MASK))
     {
         ALOGV("rk_debug force GRALLOC_ARM_HAL_FORMAT_INDEXED_P010 usage=0x%x",usage);
         return (GRALLOC_ARM_HAL_FORMAT_INDEXED_P010 | GRALLOC_ARM_INTFMT_EXTENDED_YUV);
