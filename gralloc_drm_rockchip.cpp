@@ -8,7 +8,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <drm.h>
+
+extern "C" {
 #include <rockchip/rockchip_drmif.h>
+}
+
 #include "gralloc_helper.h"
 #include "gralloc_drm.h"
 #include "gralloc_drm_priv.h"
@@ -929,7 +933,7 @@ static void init_afbc(uint8_t *buf, uint64_t format, int w, int h)
                         layout = 0;
         }
 
-        AINF("Writing AFBC header layout %d for format %"PRIu64"", layout, format);
+        AINF("Writing AFBC header layout %d for format %" PRIu64 "", layout, format);
 
         for (i = 0; i < n_headers; i++)
         {
@@ -983,6 +987,7 @@ static struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 #endif
 	uint32_t flags = 0;
 	struct drm_rockchip_gem_phys phys_arg;
+	int private_usage = 0;
 
         ALOGD("enter, w : %d, h : %d, format : 0x%x, usage : 0x%x.", w, h, format, usage);
 
@@ -1274,7 +1279,7 @@ static struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	}
 #endif //end of MALI_ARCHITECTURE_UTGARD
 #endif //end of RK_DRM_GRALLOC
-	buf = calloc(1, sizeof(*buf));
+	buf = (struct rockchip_buffer*)calloc(1, sizeof(*buf));
 	if (!buf) {
 #if RK_DRM_GRALLOC
 		AERR("Failed to allocate buffer wrapper\n");
@@ -1476,7 +1481,7 @@ static struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	}
 #endif
 
-	int private_usage = usage & (GRALLOC_USAGE_PRIVATE_0 |
+	private_usage = usage & (GRALLOC_USAGE_PRIVATE_0 |
 	                             GRALLOC_USAGE_PRIVATE_1);
 	switch (private_usage)
 	{
@@ -1643,7 +1648,8 @@ struct gralloc_drm_drv_t *gralloc_drm_drv_create_for_rockchip(int fd)
         drm_init_version();
 #endif
 
-	info = calloc(1, sizeof(*info));
+	info = (struct rockchip_info*)calloc(1, sizeof(*info));
+
 	if (!info) {
 		ALOGE("Failed to allocate rockchip gralloc device\n");
 		return NULL;

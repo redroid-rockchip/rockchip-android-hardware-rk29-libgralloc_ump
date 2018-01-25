@@ -177,7 +177,7 @@ AFBC_FILES =
 endif
 
 LOCAL_C_INCLUDES += hardware/rockchip/librkvpu
-LOCAL_SRC_FILES += gralloc_drm_rockchip.c \
+LOCAL_SRC_FILES += gralloc_drm_rockchip.cpp \
 		format_chooser.cpp \
 		format_chooser_blockinit.cpp \
 		$(AFBC_FILES)
