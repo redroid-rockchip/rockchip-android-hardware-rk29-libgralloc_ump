@@ -952,7 +952,7 @@ static void drm_gem_rockchip_destroy(struct gralloc_drm_drv_t *drv)
 	free(info);
 }
 
-static struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
+struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 		struct gralloc_drm_drv_t *drv,
 		struct gralloc_drm_handle_t *handle)
 {

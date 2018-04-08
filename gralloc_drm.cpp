@@ -180,7 +180,10 @@ static struct gralloc_drm_bo_t *validate_handle(buffer_handle_t _handle,
 		ALOGD_IF(RK_DRM_GRALLOC_DEBUG,"handle: name=%d pfd=%d\n", handle->name,handle->prime_fd);
 		/* create the struct gralloc_drm_bo_t locally */
 		if (handle->name || handle->prime_fd >= 0)
-			bo = drm->drv->alloc(drm->drv, handle);
+		{
+			//bo = drm->drv->alloc(drm->drv, handle);
+			bo = drm_gem_rockchip_alloc(drm->drv, handle);
+		}
 		else /* an invalid handle */
 			bo = NULL;
 		if (bo) {
