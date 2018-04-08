@@ -130,8 +130,6 @@ struct rockchip_buffer {
 // Default YUV stride aligment in Android
 #define YUV_ANDROID_PLANE_ALIGN 16
 
-static void drm_gem_rockchip_free(struct gralloc_drm_drv_t *drv,
-		struct gralloc_drm_bo_t *bo);
 
 /*
  * Type of allocation
@@ -1534,7 +1532,7 @@ err:
 	return NULL;
 }
 
-static void drm_gem_rockchip_free(struct gralloc_drm_drv_t *drv,
+void drm_gem_rockchip_free(struct gralloc_drm_drv_t *drv,
 		struct gralloc_drm_bo_t *bo)
 {
 	struct rockchip_buffer *buf = (struct rockchip_buffer *)bo;

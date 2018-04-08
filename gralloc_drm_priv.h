@@ -57,6 +57,8 @@ struct drm_module_t {
 #endif
 };
 
+void drm_gem_rockchip_free(struct gralloc_drm_drv_t *drv,        struct gralloc_drm_bo_t *bo);
+
 struct gralloc_drm_drv_t {
 	/* destroy the driver */
 	void (*destroy)(struct gralloc_drm_drv_t *drv);
