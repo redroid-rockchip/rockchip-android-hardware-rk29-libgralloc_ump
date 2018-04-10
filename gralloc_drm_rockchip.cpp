@@ -1,6 +1,6 @@
 #define LOG_TAG "GRALLOC-ROCKCHIP"
 
-#define ENABLE_DEBUG_LOG
+//#define ENABLE_DEBUG_LOG
 #include <log/custom_log.h>
 
 
@@ -987,7 +987,7 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	struct drm_rockchip_gem_phys phys_arg;
 	int private_usage = 0;
 
-        ALOGD("enter, w : %d, h : %d, format : 0x%x, usage : 0x%x.", w, h, format, usage);
+//        ALOGD("enter, w : %d, h : %d, format : 0x%x, usage : 0x%x.", w, h, format, usage);
 
 	phys_arg.phy_addr = 0;
 
@@ -1406,7 +1406,6 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 				ALOGE("failed to get phy address: %s\n", strerror(errno));
 			ALOGD_IF(RK_DRM_GRALLOC_DEBUG,"get phys 0x%x\n", phys_arg.phy_addr);
 		}
-	}
 
 #if GRALLOC_INIT_AFBC == 1
         if (!(usage & GRALLOC_USAGE_PROTECTED))
@@ -1422,6 +1421,7 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                 }
         }
 #endif /* GRALLOC_INIT_AFBC == 1 */
+	}
 
 #if RK_DRM_GRALLOC
 #if MALI_AFBC_GRALLOC == 1
