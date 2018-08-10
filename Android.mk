@@ -130,7 +130,7 @@ GRALLOC_INIT_AFBC?=1
 # not use afbc layer by default.
 USE_AFBC_LAYER = 0
 
-ifeq ($(strip $(TARGET_BOARD_PLATFORM)),rk3399)
+ifneq ($(filter rk3399 rk3399pro, $(strip $(TARGET_BOARD_PLATFORM))), )
 USE_AFBC_LAYER = 1
 ifeq ($(strip $(TARGET_BOARD_PLATFORM_PRODUCT)),box)
 USE_AFBC_LAYER = 0
