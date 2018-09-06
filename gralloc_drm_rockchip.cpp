@@ -993,8 +993,8 @@ static bool get_camera_formats_stride_and_size(int w, int h, uint64_t format, in
 static bool get_rk_nv12_stride_and_size(int width, int height, int* pixel_stride, int* byte_stride, size_t* size)
 {
     /**
-     * .KP : from CSY : video_decoder 要求的 byte_stride of buffer in NV12, 已经通过 width 传入.
-     * 对 NV12, byte_stride 就是 pixel_stride, 也就是 luma_stride.
+     * .KP : from CSY : video_decoder 脪陋脟贸碌脛 byte_stride of buffer in NV12, 脪脩戮颅脥篓鹿媒 width 麓芦脠毛.
+     * 露脭 NV12, byte_stride 戮脥脢脟 pixel_stride, 脪虏戮脥脢脟 luma_stride.
      */
     int luma_stride = width;
 
@@ -1005,7 +1005,7 @@ static bool get_rk_nv12_stride_and_size(int width, int height, int* pixel_stride
 
     if (size != NULL)
     {
-        /* .KP : from CSY : video_decoder 需要的 buffer 中除了 YUV 数据还有其他 metadata, 要更多的空间. 2 * w * h 一定够. */
+        /* .KP : from CSY : video_decoder 脨猫脪陋碌脛 buffer 脰脨鲁媒脕脣 YUV 脢媒戮脻禄鹿脫脨脝盲脣没 metadata, 脪陋赂眉露脿碌脛驴脮录盲. 2 * w * h 脪禄露篓鹿禄. */
         *size = 2 * luma_stride * height;
     }
 
@@ -1031,17 +1031,17 @@ static bool get_rk_nv12_10bit_stride_and_size (int width, int height, int* pixel
     }
 
     /**
-     * .KP : from CSY : video_decoder 要求的 byte_stride of buffer in NV12_10, 已经通过 width 传入.
-     * 对 NV12_10, 原理上, byte_stride 和 pixel_stride 不同.
+     * .KP : from CSY : video_decoder 脪陋脟贸碌脛 byte_stride of buffer in NV12_10, 脪脩戮颅脥篓鹿媒 width 麓芦脠毛.
+     * 露脭 NV12_10, 脭颅脌铆脡脧, byte_stride 潞脥 pixel_stride 虏禄脥卢.
      */
     *byte_stride = width;
 
-    /* .KP : from CSY : video_decoder 需要的 buffer 中除了 YUV 数据还有其他 metadata, 要更多的空间. 2 * w * h 一定够. */
+    /* .KP : from CSY : video_decoder 脨猫脪陋碌脛 buffer 脰脨鲁媒脕脣 YUV 脢媒戮脻禄鹿脫脨脝盲脣没 metadata, 脪陋赂眉露脿碌脛驴脮录盲. 2 * w * h 脪禄露篓鹿禄. */
     *size = 2 * width * height;
 
     *pixel_stride = *byte_stride;
-    // 字面上, 这是错误的,
-    // 但是目前对于 NV12_10, rk_hwc, 将 private_module_t::stride 作为 byte_stride 使用.
+    // 脳脰脙忙脡脧, 脮芒脢脟麓铆脦贸碌脛,
+    // 碌芦脢脟脛驴脟掳露脭脫脷 NV12_10, rk_hwc, 陆芦 private_module_t::stride 脳梅脦陋 byte_stride 脢鹿脫脙.
 
     return true;
 }
@@ -1491,7 +1491,7 @@ static bool should_disable_afbc_in_fb_target_layer()
 {
     char value[PROPERTY_VALUE_MAX];
 
-    property_get("sys.gralloc.disable_afbc", value, "0");
+    property_get("vendor.gralloc.disable_afbc", value, "0");
 
     return (0 == strcmp("1", value) );
 }
@@ -1545,7 +1545,7 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                                                  usage,
                                                  w * h);
 #if USE_AFBC_LAYER
-	property_get("persist.sys.framebuffer.main", framebuffer_size, "0x0@60");
+	property_get("persist.vendor.framebuffer.main", framebuffer_size, "0x0@60");
 	sscanf(framebuffer_size, "%dx%d@%d", &width, &height, &vrefresh);
 	//Vop cann't support 4K AFBC layer.
 	if (height < 2160)
@@ -1570,12 +1570,12 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                 {
                     internal_format = MALI_GRALLOC_FORMAT_INTERNAL_RGBA_8888 | MALI_GRALLOC_INTFMT_AFBC_BASIC;
 
-                    if ( handle->prime_fd < 0 ) // 只在将实际分配 buffer 的时候打印.
+                    if ( handle->prime_fd < 0 ) // 脰禄脭脷陆芦脢碌录脢路脰脜盲 buffer 碌脛脢卤潞貌麓貌脫隆.
                     {
                         I("use_afbc_layer: force to set 'internal_format' to 0x%" PRIx64 " for buffer_for_fb_target_layer.",
                           internal_format);
                     }
-                    property_set("sys.gmali.fbdc_target","1");
+                    property_set("vendor.gmali.fbdc_target","1");
                 }
                 /* if SHOULD disable AFBC in fb_target_layer, ... */
                 else
@@ -1584,12 +1584,12 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                     {
                         I("debug_only : not to use afbc in fb_target_layer, the original format : 0x%" PRIx64, internal_format);
                     }
-			        property_set("sys.gmali.fbdc_target","0");
+			        property_set("vendor.gmali.fbdc_target","0");
                 }
 	        }
 	        else
 	        {
-			    property_set("sys.gmali.fbdc_target","0");
+			    property_set("vendor.gmali.fbdc_target","0");
 	        }
 	    }
 	}
@@ -1925,7 +1925,7 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 		ALOGD_IF(RK_DRM_GRALLOC_DEBUG, "try to use secure memory\n");
 	}
 
-    /* 若 buufer 实际上已经分配 (通常在另一个进程中), 则... */
+    /* 脠么 buufer 脢碌录脢脡脧脪脩戮颅路脰脜盲 (脥篓鲁拢脭脷脕铆脪禄赂枚陆酶鲁脤脰脨), 脭貌... */
 	if (handle->prime_fd >= 0) {
 		ret = drmPrimeFDToHandle(info->fd, handle->prime_fd,
 			&gem_handle);
@@ -2288,15 +2288,11 @@ static void drm_gem_rockchip_unmap(struct gralloc_drm_drv_t *drv,
 static int drm_init_version()
 {
         char value[PROPERTY_VALUE_MAX];
-	char acCommit[50];
 
-        /* RK_GRAPHICS_VER=commit-id:067e5d0: only keep string after '=' */
-        sscanf(RK_GRAPHICS_VER, "%*[^=]=%s", acCommit);
-        property_get("sys.ggralloc.version", value, "NULL");
+        property_get("vendor.ggralloc.version", value, "NULL");
         if(!strcmp(value,"NULL"))
         {
-                property_set("sys.ggralloc.version", RK_GRALLOC_VERSION);
-		property_set("sys.ggralloc.commit", acCommit);
+                property_set("vendor.ggralloc.version", RK_GRALLOC_VERSION);
                 ALOGD(RK_GRAPHICS_VER);
                 ALOGD("gralloc ver '%s' on arm_release_ver '%s'.",
                         RK_GRALLOC_VERSION,
