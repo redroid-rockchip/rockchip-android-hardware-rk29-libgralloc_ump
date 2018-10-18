@@ -27,6 +27,7 @@
 #include <cutils/native_handle.h>
 #include <system/graphics.h>
 #include <hardware/gralloc.h>
+#include <pthread.h>
 
 #include "mali_gralloc_usages.h"
 #include "mali_gralloc_formats.h"

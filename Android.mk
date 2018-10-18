@@ -91,7 +91,9 @@ LOCAL_SRC_FILES := \
 
 LOCAL_C_INCLUDES := \
 	external/libdrm \
-	external/libdrm/include/drm
+	external/libdrm/include/drm \
+	hardware/libhardware/include \
+	system/core/liblog/include
 
 LOCAL_SHARED_LIBRARIES := \
 	libdrm \
@@ -248,7 +250,8 @@ LOCAL_SRC_FILES := \
 
 LOCAL_C_INCLUDES := \
 	external/libdrm \
-	external/libdrm/include/drm
+	external/libdrm/include/drm \
+	hardware/libhardware/include
 
 LOCAL_SHARED_LIBRARIES := \
 	libgralloc_drm \
