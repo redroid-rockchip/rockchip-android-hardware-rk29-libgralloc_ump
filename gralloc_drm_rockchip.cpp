@@ -1486,6 +1486,7 @@ static void drm_gem_rockchip_destroy(struct gralloc_drm_drv_t *drv)
 	free(info);
 }
 
+#if USE_AFBC_LAYER
 static bool should_disable_afbc_in_fb_target_layer()
 {
     char value[PROPERTY_VALUE_MAX];
@@ -1494,6 +1495,7 @@ static bool should_disable_afbc_in_fb_target_layer()
 
     return (0 == strcmp("1", value) );
 }
+#endif
 
 struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 		struct gralloc_drm_drv_t *drv,
