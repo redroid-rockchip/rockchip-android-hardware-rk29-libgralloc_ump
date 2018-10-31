@@ -23,6 +23,9 @@
 
 #define LOG_TAG "GRALLOC-MOD"
 
+// #define ENABLE_DEBUG_LOG
+#include <log/custom_log.h>
+
 #include <cutils/log.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -421,47 +424,35 @@ static int drm_mod_free_gpu0(alloc_device_t *dev, buffer_handle_t handle)
 
 static int drm_mod_alloc_gpu0(alloc_device_t *dev,
 		int w, int h, int format, int usage,
-		buffer_handle_t *handle, int *stride)
+		buffer_handle_t *handle, int *stride) // 'stride' : to return stride_in_pixel
 {
 	struct drm_module_t *dmod = (struct drm_module_t *) dev->common.module;
 	struct gralloc_drm_bo_t *bo;
-	int bpp;
+	int bpp; // bytes_per_pixel
+	int actual_format; // format used actually in the native buffer. while, 'format' : requested_format.
+	int byte_stride;
 
-#if RK_DRM_GRALLOC
-    if(format == HAL_PIXEL_FORMAT_IMPLEMENTATION_DEFINED)
-    {
-        if( (usage & GRALLOC_USAGE_HW_VIDEO_ENCODER)
-            || (usage & GRALLOC_USAGE_HW_CAMERA_WRITE) )
-        {
-            bpp = 1;    //HAL_PIXEL_FORMAT_YCrCb_NV12
-        }
-        else
-        {
-            bpp = 4;    //HAL_PIXEL_FORMAT_RGBX_8888
-        }
-    }
-    else
-#endif
-    {
-	    bpp = gralloc_drm_get_bpp(format);
-    }
-
-	if (!bpp)
-	{
-#if RK_DRM_GRALLOC
-		ALOGE("Cann't get valid bpp for format(0x%x)", format);
-#endif
-		return -EINVAL;
-	}
+	D("enter, w : %d, h : %d, format : 0x%x, usage : 0x%x.", w, h, format, usage);
 
 	bo = gralloc_drm_bo_create(dmod->drm, w, h, format, usage);
 	if (!bo)
+	{
+		E("fail to create bo.");
 		return -ENOMEM;
+	}
 
-	*handle = gralloc_drm_bo_get_handle(bo, stride);
-	//It is no need this operation since stide is already in pixels.
-	/* in pixels */
-	*stride /= bpp;
+	*handle = gralloc_drm_bo_get_handle(bo, &byte_stride);
+
+	gralloc_drm_handle_get_format(*handle, &actual_format);
+	bpp = gralloc_drm_get_bpp(actual_format);
+	if (!bpp)
+	{
+#if RK_DRM_GRALLOC
+		ALOGE("Cann't get valid bpp for format(0x%x)", actual_format);
+#endif
+		return -EINVAL;
+	}
+	*stride = byte_stride / bpp;
 
 	return 0;
 }
