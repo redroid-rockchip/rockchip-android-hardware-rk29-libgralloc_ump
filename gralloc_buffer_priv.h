@@ -29,6 +29,9 @@ extern "C" {
 
 // private gralloc buffer manipulation API
 
+/**
+ * .DP : gralloc_buffer_attr_buffer_t
+ */
 struct attr_region
 {
 	/* Rectangle to be cropped from the full frame (Origin in top-left corner!) */
@@ -197,6 +200,9 @@ out:
 	return rval;
 }
 #endif
+
+/*---------------------------------------------------------------------------*/
+// mali_so 依赖 gralloc 的部分, 会直接调用下面 4 个 函数.
 
 /*
  * Map the attribute storage area before attempting to
