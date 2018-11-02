@@ -1569,6 +1569,10 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                                                  MALI_GRALLOC_FORMAT_TYPE_USAGE,
                                                  usage,
                                                  w * h);
+
+    /*-------------------------------------------------------*/
+    // for afbc_framebuffer_target_layer
+
 #if USE_AFBC_LAYER
 	property_get("persist.vendor.framebuffer.main", framebuffer_size, "0x0@60");
 	sscanf(framebuffer_size, "%dx%d@%d", &width, &height, &vrefresh);
@@ -1619,6 +1623,9 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	    }
 	}
 #endif
+
+    /*-------------------------------------------------------*/
+    // 来自 arm_gralloc 的逻辑, 根据 internal_format, w, h 等, 计算 side, stride 等.
 
     /* Determine AFBC type for this format */
     if (internal_format & MALI_GRALLOC_INTFMT_AFBCENABLE_MASK)
@@ -1905,6 +1912,8 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 		return NULL;
 	}
 
+    /*-------------------------------------------------------*/
+
 #if !RK_DRM_GRALLOC
         cpp = gralloc_drm_get_bpp(handle->format);
         if (!cpp) {
@@ -1921,8 +1930,6 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	pitch = ALIGN(aligned_width * cpp, 64);
 	size = aligned_height * pitch;
 
-    /*-------------------------------------------------------*/
-
 	if (handle->format == HAL_PIXEL_FORMAT_YCbCr_420_888) {
 		/*
 		 * WAR for H264 decoder requiring additional space
@@ -1935,6 +1942,9 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 		size += 64 * w_mbs * h_mbs;
 	}
 #endif
+
+    /*-------------------------------------------------------*/
+    // 根据 'usage' 预置待 alloc 或 import 的 flags, cachable 或 物理连续 等.
 
 	if ( (usage & GRALLOC_USAGE_SW_READ_MASK) == GRALLOC_USAGE_SW_READ_OFTEN
 		|| format == HAL_PIXEL_FORMAT_YCrCb_NV12_10)
@@ -2125,30 +2135,8 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
 	}
 #endif
 
-#if 0
-	int private_usage = usage & (GRALLOC_USAGE_PRIVATE_0 |
-	                             GRALLOC_USAGE_PRIVATE_1);
-	switch (private_usage)
-	{
-		case 0:
-			if(USAGE_CONTAIN_VALUE(GRALLOC_USAGE_TO_USE_ARM_P010,GRALLOC_USAGE_ROT_MASK))
-				handle->yuv_info = MALI_YUV_BT709_WIDE;//MALI_YUV_BT601_NARROW;
-			else
-				handle->yuv_info = MALI_YUV_BT601_NARROW;
-			break;
-		case GRALLOC_USAGE_PRIVATE_1:
-			handle->yuv_info = MALI_YUV_BT601_WIDE;
-			break;
-		case GRALLOC_USAGE_PRIVATE_0:
-			handle->yuv_info = MALI_YUV_BT709_NARROW;
-			break;
-		case (GRALLOC_USAGE_PRIVATE_0 | GRALLOC_USAGE_PRIVATE_1):
-			handle->yuv_info = MALI_YUV_BT709_WIDE;
-			break;
-	}
-#endif
-    
     /*-------------------------------------------------------*/
+    // 处理 private usage.
 
     switch (usage & MALI_GRALLOC_USAGE_YUV_CONF_MASK)
     {
@@ -2202,10 +2190,12 @@ struct gralloc_drm_bo_t *drm_gem_rockchip_alloc(
                 handle->width, handle->height, handle->format,internal_format, handle->usage, handle->size,
                 pixel_stride,byte_stride);
         AINF("leave: prime_fd=%d,share_attr_fd=%d",handle->prime_fd,handle->share_attr_fd);
+
 	return &buf->base;
 
 err_unref:
 	rockchip_bo_destroy(buf->bo);
+
 err:
 	free(buf);
 	return NULL;
