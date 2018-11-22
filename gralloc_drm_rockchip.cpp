@@ -20,8 +20,6 @@
 // #define ENABLE_DEBUG_LOG
 #include <log/custom_log.h>
 
-
-#include <cutils/log.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <drm.h>
