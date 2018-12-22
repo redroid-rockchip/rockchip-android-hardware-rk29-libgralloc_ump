@@ -58,7 +58,7 @@ extern "C" {
 #define UNUSED(...) (void)(__VA_ARGS__)
 
 #if RK_CTS_WORKROUND
-#define VIEW_CTS_FILE		"/metadata/view_cts.ini"
+#define VIEW_CTS_FILE		"/data/data/android.view.cts/view_cts.ini"
 #define VIEW_CTS_PROG_NAME	"android.view.cts"
 #define VIEW_CTS_HINT		"view_cts"
 #define BIG_SCALE_HINT		"big_scale"
