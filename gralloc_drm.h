@@ -31,7 +31,7 @@
 
 #include <hardware/gralloc.h>
 #include <system/graphics.h>
-
+#include <mali_gralloc_formats.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -85,6 +85,7 @@ static inline int gralloc_drm_get_bpp(int format)
 	case HAL_PIXEL_FORMAT_YCbCr_420_888:
 #if RK_DRM_GRALLOC
 	case HAL_PIXEL_FORMAT_YCrCb_NV12_10:
+	case MALI_GRALLOC_FORMAT_INTERNAL_P010:
 #endif
 	case HAL_PIXEL_FORMAT_BLOB:
 		bpp = 1;
