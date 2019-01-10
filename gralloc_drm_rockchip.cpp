@@ -1173,11 +1173,6 @@ static bool get_rk_nv12_stride_and_size(int width, int height, int* pixel_stride
      */
     int luma_stride = width;
 
-    if (width % 2 != 0 || height % 2 != 0)
-    {
-        return false;
-    }
-
     if (size != NULL)
     {
         /* .KP : from CSY : video_decoder 需要的 buffer 中除了 YUV 数据还有其他 metadata, 要更多的空间. 2 * w * h 一定够. */
